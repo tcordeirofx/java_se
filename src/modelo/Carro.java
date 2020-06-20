@@ -1,10 +1,20 @@
 package modelo;
 
-public class Carro extends Registro {
-	
+public class Carro extends Registro implements Cloneable {
+ 
 	private String Modelo;
 	private String Marca;
 	private float Valor;
+	
+	public Carro clone() {
+		try {
+			return (Carro) super.clone();
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	} 
 	
 	public final String getModelo() {
 		return Modelo;

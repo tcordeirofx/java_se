@@ -2,10 +2,20 @@ package modelo;
 
 import java.util.ArrayList;
 
-public class Venda extends Registro {
-	
+public class Venda extends Registro implements Cloneable {
+	 
 	private Cliente Cliente;
 	private ArrayList<Carro> Carros;
+		
+	public Venda clone() {
+		try {
+			return (Venda) super.clone();
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}	
 		
 	public final Cliente getCliente() {
 		return Cliente;

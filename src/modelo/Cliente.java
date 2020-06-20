@@ -1,12 +1,22 @@
 package modelo;
 
-public class Cliente extends Registro {
-	
+public class Cliente extends Registro implements Cloneable {
+	 
 	private String Nome;
 	private String Documento;
 	private String Endereco;
 	private String Celular;
 	private String Email;
+	
+	public Cliente clone() {
+		try {
+			return (Cliente) super.clone();
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	} 		
 	
 	public final String getNome() {
 		return Nome;

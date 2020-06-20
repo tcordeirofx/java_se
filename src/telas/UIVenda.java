@@ -133,7 +133,7 @@ public class UIVenda {
 
 			Integer cod = GetSelectedId(cbCarro);
 
-			Current.getCarros().add((Carro) servicoCarro.GetById(cod));
+			Current.getCarros().add(((Carro) servicoCarro.GetById(cod)).clone());
 
 			loadTableCarro();
 		} catch (Exception e) {
@@ -168,7 +168,7 @@ public class UIVenda {
 			
 			Integer cod = GetSelectedId(cbCliente);
 			
-			Current.setCliente((Cliente) servicoCliente.GetById(cod));
+			Current.setCliente(((Cliente) servicoCliente.GetById(cod)).clone());
 			
 			servicoVenda.Inserir(Current);
 			
@@ -203,23 +203,6 @@ public class UIVenda {
 	 */
 	private void initialize() {
 		frmNovaVenda = new JFrame();
-//		frmNovaVenda.addWindowListener(new WindowAdapter() {
-//			@Override
-//			public void windowOpened(WindowEvent e) {
-//				String t = "";
-//			}
-//		});
-//
-//		frmNovaVenda.addWindowFocusListener(new WindowFocusListener() {
-//			public void windowGainedFocus(WindowEvent arg0) {
-//				//loadForm();
-//			}
-//
-//			public void windowLostFocus(WindowEvent arg0) {
-//				String t = "";
-//			}
-//		});
-
 		frmNovaVenda.setTitle("Nova Venda");
 		frmNovaVenda.setBounds(100, 100, 568, 374);
 		frmNovaVenda.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
