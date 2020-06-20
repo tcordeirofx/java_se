@@ -25,19 +25,19 @@ public class Inicio {
 		}		
 	}
 	
-	private static void CarregaContexto() {
-		
+	private static void CarregaContexto() {		
 		//Inicializa Contexto de Dados
 		Contexto.Carregar();
-		//Seed();
+		Seed();
 	}
 	
+	@SuppressWarnings("unused")
 	private static void Seed() {
 		ArrayList<Carro> carros = Contexto.getCarros();		
 		ArrayList<Cliente> clientes = Contexto.getClientes();
 		ArrayList<Venda> vendas = Contexto.getVendas();
 		
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 2; i++) {
 			Carro carro = new Carro();
 			carro.setMarca("Marca " + i);
 			carro.setModelo("Modelo "+ i);
@@ -46,7 +46,7 @@ public class Inicio {
 			carros.add(carro);			
 		}
 		
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 2; i++) {
 			Cliente cliente = new Cliente();
 			cliente.setCelular(Double.toString(Math.random() * 10));
 			cliente.setDocumento(Double.toString(Math.random() * 10));
@@ -57,11 +57,18 @@ public class Inicio {
 			clientes.add(cliente);			
 		}
 		
-		for (int i = 0; i < 5; i++) {
-			Venda venda = new Venda();
-			venda.setCarros(carros);
-			venda.setCliente(clientes.get(2));
-			vendas.add(venda);
-		}	
+		
+		Venda venda = new Venda();
+		venda.setId(1);
+		venda.setCarros(carros);
+		venda.setCliente(clientes.get(1));
+		vendas.add(venda);
+		
+		venda = new Venda();
+		venda.setId(2);
+		venda.setCarros(carros);
+		venda.setCliente(clientes.get(0));
+		vendas.add(venda);
+			
 	}
 }

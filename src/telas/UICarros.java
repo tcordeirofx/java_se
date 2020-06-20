@@ -86,7 +86,6 @@ public class UICarros {
 		txtMarca.setText(Current.getMarca());
 		txtModelo.setText(Current.getModelo());
 		txtValor.setText(String.valueOf(Current.getValor()));
-				
 		refreshBotoes();
 	}
 	
@@ -120,10 +119,15 @@ public class UICarros {
 	}
 	
 	private void CriarItem () {
-		try {
-								
+		try {							
+			
+			try {
+				Current.setValor(Float.valueOf(txtValor.getText()));
+			} catch (Exception e) {
+				throw new Exception("Formato de valor incorreto!");
+			}			
+			
 			Current.setModelo(txtModelo.getText());
-			Current.setValor(Float.valueOf(txtValor.getText()));
 			Current.setMarca(txtMarca.getText());
 			
 			if(!Valido()) {
@@ -147,8 +151,13 @@ public class UICarros {
 	private void AtualizarItem () {
 		try {
 					
+			try {
+				Current.setValor(Float.valueOf(txtValor.getText()));
+			} catch (Exception e) {
+				throw new Exception("Formato de valor incorreto!");
+			}
+			
 			Current.setModelo(txtModelo.getText());
-			Current.setValor(Float.parseFloat(txtValor.getText()));
 			Current.setMarca(txtMarca.getText());
 			
 			if(!Valido()) {
@@ -210,7 +219,7 @@ public class UICarros {
 		frmCadastroDeCarros.setResizable(false);
 		frmCadastroDeCarros.setTitle("Cadastro de Carros");
 		frmCadastroDeCarros.setBounds(100, 100, 649, 431);
-		frmCadastroDeCarros.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		frmCadastroDeCarros.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		
@@ -280,24 +289,22 @@ public class UICarros {
 							.addGap(10)
 							.addComponent(separator, GroupLayout.PREFERRED_SIZE, 613, GroupLayout.PREFERRED_SIZE))
 						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(10)
-							.addComponent(lblCelular, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
-							.addGap(4)
-							.addComponent(txtValor, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(54)
-							.addComponent(btnSalvar)
+							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
+								.addComponent(lblCelular, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(lblNome, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE))
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(btnExcluir, GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE)
-							.addGap(6)
-							.addComponent(btnNovo, GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(lblNome, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
-							.addGap(4)
-							.addComponent(txtModelo, GroupLayout.PREFERRED_SIZE, 189, GroupLayout.PREFERRED_SIZE)
-							.addGap(10)
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addComponent(txtValor, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
+								.addComponent(txtModelo, GroupLayout.PREFERRED_SIZE, 189, GroupLayout.PREFERRED_SIZE)
+								.addGroup(groupLayout.createSequentialGroup()
+									.addComponent(btnSalvar)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(btnExcluir, GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE)
+									.addGap(6)
+									.addComponent(btnNovo, GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE)))
+							.addPreferredGap(ComponentPlacement.UNRELATED)
 							.addComponent(lblTelefone, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
-							.addGap(4)
+							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(txtMarca, GroupLayout.PREFERRED_SIZE, 229, GroupLayout.PREFERRED_SIZE)))
 					.addContainerGap(20, Short.MAX_VALUE))
 		);
@@ -308,27 +315,22 @@ public class UICarros {
 					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 250, GroupLayout.PREFERRED_SIZE)
 					.addGap(18)
 					.addComponent(separator, GroupLayout.PREFERRED_SIZE, 10, GroupLayout.PREFERRED_SIZE)
-					.addGap(8)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(3)
-							.addComponent(lblNome))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(txtModelo, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(3)
-							.addComponent(lblTelefone))
-						.addComponent(txtMarca, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(8)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(6)
-							.addComponent(lblCelular))
-						.addComponent(txtValor, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(11)
+						.addComponent(txtMarca, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblTelefone)
+						.addComponent(lblNome))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(txtValor, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblCelular))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addComponent(btnSalvar)
 						.addComponent(btnExcluir)
-						.addComponent(btnNovo)))
+						.addComponent(btnNovo))
+					.addGap(17))
 		);
 		frmCadastroDeCarros.getContentPane().setLayout(groupLayout);
 	}

@@ -22,10 +22,13 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Dimension;
 
+import modelo.Carro;
+import modelo.Cliente;
 import modelo.Venda;
-import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
+import javax.swing.event.PopupMenuListener;
+import javax.swing.event.PopupMenuEvent;
 
 public class UICaixa {
 
@@ -34,8 +37,10 @@ public class UICaixa {
 	private UIClientes clientes = new UIClientes();
 	private UIVenda venda = new UIVenda();
 	private UICarros carros = new UICarros();
-	private jDialogExemplo JFrameTeste = new jDialogExemplo();
-
+	
+	JComboBox<String> cbCliente;
+	JComboBox<String> cbCarro;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -58,6 +63,32 @@ public class UICaixa {
 	public UICaixa() throws Exception {
 		initialize();
 		loadTable();
+		loadForm();
+	}
+		
+	public void loadForm() {
+		loadCarros();
+		loadClientes();
+	}
+	
+	public void loadCarros() {
+		cbCarro.removeAllItems();
+
+		cbCarro.addItem("Selecione");
+
+		for (Carro item : Contexto.getCarros()) {
+			cbCarro.addItem(item.getId() + " - " + item.getModelo());
+		}
+	}
+	
+	public void loadClientes() {
+		cbCliente.removeAllItems();
+		
+		cbCliente.addItem("Selecione");
+		
+		for (Cliente item : Contexto.getClientes()) {
+			cbCliente.addItem(item.getId() + " - " + item.getNome());
+		}
 	}
 	
 	private void loadTable() {
@@ -95,11 +126,9 @@ public class UICaixa {
 		btnNovaVenda.setBounds(450, 30, 101, 34);
 		btnNovaVenda.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				//venda.frmNovaVenda.setVisible(true);
-				JFrameTeste.setVisible(true);
+				venda.frmNovaVenda.setVisible(true);
 				venda.frmNovaVenda.addWindowFocusListener(new WindowFocusListener() {
-					public void windowGainedFocus(WindowEvent arg0) {
-						//loadForm();
+					public void windowGainedFocus(WindowEvent arg0) {						
 					}
 
 					public void windowLostFocus(WindowEvent arg0) {
@@ -128,8 +157,18 @@ public class UICaixa {
 		JLabel lblNewLabel_1 = new JLabel("Cliente");
 		lblNewLabel_1.setBounds(20, 12, 39, 16);
 		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(12, 35, 124, 25);
+		cbCliente = new JComboBox<String>();
+		cbCliente.addPopupMenuListener(new PopupMenuListener() {
+			public void popupMenuCanceled(PopupMenuEvent arg0) {
+			}
+			public void popupMenuWillBecomeInvisible(PopupMenuEvent arg0) {
+			}
+			public void popupMenuWillBecomeVisible(PopupMenuEvent arg0) {
+				loadClientes();
+			}
+		});
+
+		cbCliente.setBounds(12, 35, 124, 25);
 		
 		JSeparator separator = new JSeparator();
 		separator.setBounds(12, 76, 733, 2);
@@ -137,28 +176,37 @@ public class UICaixa {
 		JLabel lblCarro = new JLabel("Carro");
 		lblCarro.setBounds(156, 12, 33, 16);
 		
-		JComboBox comboBox_1 = new JComboBox();
-		comboBox_1.setBounds(148, 35, 124, 25);
+		cbCarro = new JComboBox<String>();
+		cbCarro.setBounds(148, 35, 124, 25);
+		cbCarro.addPopupMenuListener(new PopupMenuListener() {
+			public void popupMenuCanceled(PopupMenuEvent arg0) {
+			}
+			public void popupMenuWillBecomeInvisible(PopupMenuEvent arg0) {
+			}
+			public void popupMenuWillBecomeVisible(PopupMenuEvent arg0) {
+				loadCarros();
+			}
+		});
 		
-		JButton btnNewButton = new JButton("Pesquisar");
-		btnNewButton.setBounds(278, 34, 92, 26);
+		JButton btnPesquisar = new JButton("Pesquisar");
+		btnPesquisar.setBounds(278, 34, 92, 26);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(12, 111, 733, 278);
 		
-		JLabel lblNewLabel = new JLabel("Exportar?");
-		lblNewLabel.setBounds(382, 39, 56, 16);
-		lblNewLabel.setForeground(SystemColor.textHighlight);
-		lblNewLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		JLabel btnExportar = new JLabel("Exportar?");
+		btnExportar.setBounds(382, 39, 56, 16);
+		btnExportar.setForeground(SystemColor.textHighlight);
+		btnExportar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		
 		tbVendas = new JTable();
 		scrollPane.setViewportView(tbVendas);
 		frmCaixa.getContentPane().setLayout(null);
-		frmCaixa.getContentPane().add(comboBox);
+		frmCaixa.getContentPane().add(cbCliente);
 		frmCaixa.getContentPane().add(lblNewLabel_1);
-		frmCaixa.getContentPane().add(comboBox_1);
-		frmCaixa.getContentPane().add(btnNewButton);
-		frmCaixa.getContentPane().add(lblNewLabel);
+		frmCaixa.getContentPane().add(cbCarro);
+		frmCaixa.getContentPane().add(btnPesquisar);
+		frmCaixa.getContentPane().add(btnExportar);
 		frmCaixa.getContentPane().add(btnNovaVenda);
 		frmCaixa.getContentPane().add(btnCarros);
 		frmCaixa.getContentPane().add(btnClientes);

@@ -22,8 +22,7 @@ public class Contexto {
 	
 	public static final ArrayList<Venda> getVendas() {
 		return Vendas;
-	}
-	
+	}	
 	
 	public static void main(String[] args) {
 		Carros = new ArrayList<Carro>();
