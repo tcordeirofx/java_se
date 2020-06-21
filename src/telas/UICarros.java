@@ -4,6 +4,7 @@ import static aplicacao.Helpers.ClearTable;
 import static aplicacao.Helpers.ExibeMensagem;
 import static aplicacao.Helpers.GetSelectedId;
 import static aplicacao.Helpers.NuloOuVazio;
+import static aplicacao.Helpers.SalvaArquivo;
 
 import java.awt.EventQueue;
 
@@ -15,6 +16,7 @@ import javax.swing.JTable;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.table.DefaultTableModel;
 
 import aplicacao.Contexto;
@@ -23,11 +25,18 @@ import servicos.ServicoCarro;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
+
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.SystemColor;
+import java.awt.Cursor;
 
 public class UICarros {
 	
@@ -47,6 +56,8 @@ public class UICarros {
 	private JLabel lblCelular;
 	private JTextField txtValor;
 
+	JFileChooser fileChooser = new JFileChooser();
+	
 	/**
 	 * Launch the application.
 	 */
@@ -211,6 +222,27 @@ public class UICarros {
 		}	
 	}
 	
+	private void salvarRelatorio(File file) {
+		try {
+			String rel = "Código;Modelo;Marca;Valor";
+			
+			for (Carro carro : Contexto.getCarros()) {
+				String padrao = "\n%d;%s;%s;%f";
+								
+				rel += String.format(padrao, 
+						carro.getId(),
+						carro.getModelo(),
+						carro.getMarca(),						
+						carro.getValor());
+			}
+			
+			SalvaArquivo(file, rel);
+		} catch (IOException e) {
+			e.printStackTrace();
+			ExibeMensagem("Falha ao salvar o arquivo.");
+		}
+	}
+	
 	/**
 	 * Initialize the contents of the frame.
 	 */
@@ -277,6 +309,19 @@ public class UICarros {
 			}
 		});
 		
+		JLabel btnExportar = new JLabel("Exportar?");
+		btnExportar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnExportar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				int result = fileChooser.showSaveDialog(btnExportar);
+				if (result == JFileChooser.APPROVE_OPTION) {
+					salvarRelatorio(fileChooser.getSelectedFile());
+				}
+			}
+		});
+		btnExportar.setForeground(SystemColor.textHighlight);
+		
 		GroupLayout groupLayout = new GroupLayout(frmCadastroDeCarros.getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -303,9 +348,12 @@ public class UICarros {
 									.addGap(6)
 									.addComponent(btnNovo, GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE)))
 							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(lblTelefone, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(txtMarca, GroupLayout.PREFERRED_SIZE, 229, GroupLayout.PREFERRED_SIZE)))
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addGroup(groupLayout.createSequentialGroup()
+									.addComponent(lblTelefone, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(txtMarca, GroupLayout.PREFERRED_SIZE, 229, GroupLayout.PREFERRED_SIZE))
+								.addComponent(btnExportar, GroupLayout.PREFERRED_SIZE, 56, GroupLayout.PREFERRED_SIZE))))
 					.addContainerGap(20, Short.MAX_VALUE))
 		);
 		groupLayout.setVerticalGroup(
@@ -329,9 +377,18 @@ public class UICarros {
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addComponent(btnSalvar)
 						.addComponent(btnExcluir)
-						.addComponent(btnNovo))
+						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+							.addComponent(btnNovo)
+							.addComponent(btnExportar)))
 					.addGap(17))
 		);
 		frmCadastroDeCarros.getContentPane().setLayout(groupLayout);
+		
+		fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+		fileChooser.setDialogTitle("Como deseja salvar o arquivo?"); 
+		
+		fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Documentos CSV", "csv"));
+		fileChooser.setAcceptAllFileFilterUsed(false);
+		fileChooser.setSelectedFile(new File("Relatorio_Carros.csv"));
 	}
 }

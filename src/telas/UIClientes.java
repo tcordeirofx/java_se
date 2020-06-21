@@ -10,19 +10,27 @@ import javax.swing.JTable;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.table.DefaultTableModel;
 
 import aplicacao.Contexto;
 import static aplicacao.Helpers.*;
+
 import modelo.Cliente;
 import servicos.ServicoCliente;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
+
 import javax.swing.JSeparator;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.SystemColor;
+import java.awt.Cursor;
 
 public class UIClientes {
 
@@ -45,6 +53,9 @@ public class UIClientes {
 	private JButton btnNovo;
 	private JLabel lblCelular;
 	private JTextField txtCelular;
+	private JLabel btnExportar;
+	
+	JFileChooser fileChooser = new JFileChooser();
 
 	/**
 	 * Launch the application.
@@ -210,6 +221,29 @@ public class UIClientes {
 		}		
 	}
 
+	private void salvarRelatorio(File file) {
+		try {
+			String rel = "Código;Nome;Documento;Endereço;Email;Celular";
+			
+			for (Cliente cliente : Contexto.getClientes()) {
+				String padrao = "\n%d;%s;%s;%s;%s;%s";
+								
+				rel += String.format(padrao, 
+						cliente.getId(),
+						cliente.getNome(),
+						cliente.getDocumento(),						
+						cliente.getEndereco(),
+						cliente.getEmail(),
+						cliente.getCelular());
+			}
+			
+			SalvaArquivo(file, rel);
+		} catch (IOException e) {
+			e.printStackTrace();
+			ExibeMensagem("Falha ao salvar o arquivo.");
+		}
+	}
+	
 	/**
 	 * Initialize the contents of the frame.
 	 */
@@ -282,6 +316,19 @@ public class UIClientes {
 				NovoItem();
 			}
 		});
+		
+		btnExportar = new JLabel("Exportar?");
+		btnExportar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnExportar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int result = fileChooser.showSaveDialog(btnExportar);
+				if (result == JFileChooser.APPROVE_OPTION) {
+					salvarRelatorio(fileChooser.getSelectedFile());
+				}
+			}
+		});
+		btnExportar.setForeground(SystemColor.textHighlight);
 		GroupLayout groupLayout = new GroupLayout(frmCadastroDeClientes.getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -325,7 +372,9 @@ public class UIClientes {
 									.addPreferredGap(ComponentPlacement.RELATED)
 									.addComponent(btnExcluir, GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE)
 									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(btnNovo, GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE)))))
+									.addComponent(btnNovo, GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addComponent(btnExportar, GroupLayout.PREFERRED_SIZE, 56, GroupLayout.PREFERRED_SIZE)))))
 					.addContainerGap(20, Short.MAX_VALUE))
 		);
 		groupLayout.setVerticalGroup(
@@ -358,9 +407,18 @@ public class UIClientes {
 						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 							.addComponent(btnSalvar)
 							.addComponent(btnExcluir))
-						.addComponent(btnNovo))
+						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+							.addComponent(btnNovo)
+							.addComponent(btnExportar)))
 					.addGap(14))
 		);
 		frmCadastroDeClientes.getContentPane().setLayout(groupLayout);
+		
+		fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+		fileChooser.setDialogTitle("Como deseja salvar o arquivo?"); 
+		
+		fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Documentos CSV", "csv"));
+		fileChooser.setAcceptAllFileFilterUsed(false);
+		fileChooser.setSelectedFile(new File("Relatorio_Clientes.csv"));
 	}
 }

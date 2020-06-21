@@ -2,7 +2,6 @@ package servicos;
 
 import aplicacao.Contexto;
 import interfaces.IServico;
-import modelo.Cliente;
 import modelo.Registro;
 import modelo.Venda;
 

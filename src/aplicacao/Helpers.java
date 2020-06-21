@@ -6,6 +6,11 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import static javax.swing.JOptionPane.showMessageDialog;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import javax.swing.JComboBox;
 
 public class Helpers {
@@ -48,5 +53,13 @@ public class Helpers {
 	
 	public static void Get(String msg) {
 		showMessageDialog(null, msg);
+	}
+	
+	public static void SalvaArquivo (File file, String content) throws IOException {
+		FileWriter escrita = new FileWriter(file);
+		BufferedWriter bwEscrita = new BufferedWriter(escrita);
+		bwEscrita.write(content);
+		bwEscrita.close();
+		escrita.close();
 	}
 }

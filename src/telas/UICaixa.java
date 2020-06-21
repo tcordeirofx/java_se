@@ -17,6 +17,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import aplicacao.Contexto;
+import static aplicacao.Helpers.*;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -28,7 +29,14 @@ import modelo.Venda;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 import javax.swing.event.PopupMenuListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.event.PopupMenuEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+import javax.swing.JFileChooser;
+import java.io.File;
+import java.io.IOException;    
 
 public class UICaixa {
 
@@ -41,6 +49,8 @@ public class UICaixa {
 	JComboBox<String> cbCliente;
 	JComboBox<String> cbCarro;
 	
+	JFileChooser fileChooser = new JFileChooser();
+		
 	/**
 	 * Launch the application.
 	 */
@@ -109,6 +119,33 @@ public class UICaixa {
 				venda.getTotal()
 			});			
 		}		
+	}
+	
+	private void salvarRelatorio(File file) {
+		try {
+			String rel = "Código;Cliente;Itens;Veiculos;Total";
+			
+			for (Venda venda : Contexto.getVendas()) {
+				String padrao = "\n%d;%s;%d;%s;%f";
+				String veiculos = "";
+				
+				for (Carro carro : venda.getCarros()) {
+					veiculos += (veiculos == "" ? "" : ", ") + carro.getModelo();					
+				}
+				
+				rel += String.format(padrao, 
+						venda.getId(),
+						venda.getCliente().getNome(),
+						venda.getCarros().size(),
+						veiculos,
+						venda.getTotal());
+			}
+			
+			SalvaArquivo(file, rel);
+		} catch (IOException e) {
+			e.printStackTrace();
+			ExibeMensagem("Falha ao salvar o arquivo.");
+		}
 	}
 
 	/**
@@ -195,6 +232,15 @@ public class UICaixa {
 		scrollPane.setBounds(12, 111, 733, 278);
 		
 		JLabel btnExportar = new JLabel("Exportar?");
+		btnExportar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				int result = fileChooser.showSaveDialog(btnExportar);
+				if (result == JFileChooser.APPROVE_OPTION) {
+					salvarRelatorio(fileChooser.getSelectedFile());
+				}
+			}
+		});
 		btnExportar.setBounds(382, 39, 56, 16);
 		btnExportar.setForeground(SystemColor.textHighlight);
 		btnExportar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -213,5 +259,12 @@ public class UICaixa {
 		frmCaixa.getContentPane().add(lblCarro);
 		frmCaixa.getContentPane().add(separator);
 		frmCaixa.getContentPane().add(scrollPane);
+		
+		fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+		fileChooser.setDialogTitle("Como deseja salvar o arquivo?"); 
+		
+		fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Documentos CSV", "csv"));
+		fileChooser.setAcceptAllFileFilterUsed(false);
+		fileChooser.setSelectedFile(new File("Relatorio_Vendas.csv"));
 	}
 }
