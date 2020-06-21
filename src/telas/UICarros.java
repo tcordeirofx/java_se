@@ -118,7 +118,6 @@ public class UICarros {
 			loadForm();
 			
 		} catch (Exception e) {
-			e.printStackTrace();
 			ExibeMensagem(e.getMessage());
 		}
 	}
@@ -154,7 +153,6 @@ public class UICarros {
 			loadForm();
 			
 		} catch (Exception e) {
-			e.printStackTrace();
 			ExibeMensagem(e.getMessage());
 		}
 	}
@@ -183,8 +181,7 @@ public class UICarros {
 			loadTable();
 			loadForm();
 						
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (Exception e) {			
 			ExibeMensagem(e.getMessage());
 		}
 	}
@@ -198,7 +195,6 @@ public class UICarros {
 			loadForm();
 			
 		} catch (Exception e) {
-			e.printStackTrace();
 			ExibeMensagem(e.getMessage());
 		}		
 	}
@@ -238,7 +234,6 @@ public class UICarros {
 			
 			SalvaArquivo(file, rel);
 		} catch (IOException e) {
-			e.printStackTrace();
 			ExibeMensagem("Falha ao salvar o arquivo.");
 		}
 	}

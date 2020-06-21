@@ -37,7 +37,8 @@ import java.awt.event.MouseEvent;
 import javax.swing.JFileChooser;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;    
+import java.util.ArrayList;
+import javax.swing.ListSelectionModel;    
 
 public class UICaixa {
 
@@ -111,8 +112,6 @@ public class UICaixa {
 		try {
 			cdCarro = GetSelectedId(cbCarro);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} finally {
 			if(cdCarro == null) cdCarro = 0;
 		}
@@ -120,8 +119,6 @@ public class UICaixa {
 		try {
 			cdCliente = GetSelectedId(cbCliente);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} finally {
 			if(cdCliente == null) cdCliente = 0;
 		}
@@ -190,7 +187,6 @@ public class UICaixa {
 			
 			SalvaArquivo(file, rel);
 		} catch (IOException e) {
-			e.printStackTrace();
 			ExibeMensagem("Falha ao salvar o arquivo.");
 		}
 	}
@@ -201,6 +197,7 @@ public class UICaixa {
 	 */
 	private void initialize() throws Exception {
 		frmCaixa = new JFrame();
+		frmCaixa.setResizable(false);
 		frmCaixa.setTitle("Caixa");
 		frmCaixa.setSize(new Dimension(802, 440));
 		frmCaixa.setBounds(100, 100, 773, 440);
@@ -299,6 +296,7 @@ public class UICaixa {
 		btnExportar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		
 		tbVendas = new JTable();
+		tbVendas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		scrollPane.setViewportView(tbVendas);
 		frmCaixa.getContentPane().setLayout(null);
 		frmCaixa.getContentPane().add(cbCliente);

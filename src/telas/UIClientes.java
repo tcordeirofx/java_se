@@ -142,7 +142,6 @@ public class UIClientes {
 			loadForm();
 			
 		} catch (Exception e) {
-			e.printStackTrace();
 			ExibeMensagem(e.getMessage());
 		}
 	}
@@ -175,7 +174,6 @@ public class UIClientes {
 			loadForm();
 			
 		} catch (Exception e) {
-			e.printStackTrace();
 			ExibeMensagem(e.getMessage());
 		}
 	}
@@ -202,7 +200,6 @@ public class UIClientes {
 			loadForm();
 						
 		} catch (Exception e) {
-			e.printStackTrace();
 			ExibeMensagem(e.getMessage());
 		}
 	}
@@ -216,7 +213,6 @@ public class UIClientes {
 			loadForm();
 			
 		} catch (Exception e) {
-			e.printStackTrace();
 			ExibeMensagem(e.getMessage());
 		}		
 	}
@@ -239,7 +235,6 @@ public class UIClientes {
 			
 			SalvaArquivo(file, rel);
 		} catch (IOException e) {
-			e.printStackTrace();
 			ExibeMensagem("Falha ao salvar o arquivo.");
 		}
 	}

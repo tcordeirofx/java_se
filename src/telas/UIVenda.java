@@ -138,7 +138,6 @@ public class UIVenda {
 			loadTableCarro();
 		} catch (Exception e) {
 			ExibeMensagem(e.getMessage());
-			e.printStackTrace();
 		}
 	}
 
@@ -176,7 +175,6 @@ public class UIVenda {
 			frmNovaVenda.setVisible(false);
 		} catch (Exception e) {
 			ExibeMensagem(e.getMessage());
-			e.printStackTrace();
 		}
 	}
 	
@@ -193,7 +191,6 @@ public class UIVenda {
 			} else 
 				btnExcluir.setEnabled(false);
 		} catch (Exception e) {
-			e.printStackTrace();
 			ExibeMensagem(e.getMessage());
 		}
 	}
@@ -203,6 +200,7 @@ public class UIVenda {
 	 */
 	private void initialize() {
 		frmNovaVenda = new JFrame();
+		frmNovaVenda.setResizable(false);
 		frmNovaVenda.setTitle("Nova Venda");
 		frmNovaVenda.setBounds(100, 100, 568, 374);
 		frmNovaVenda.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
