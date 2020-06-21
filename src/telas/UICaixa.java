@@ -36,7 +36,8 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JFileChooser;
 import java.io.File;
-import java.io.IOException;    
+import java.io.IOException;
+import java.util.ArrayList;    
 
 public class UICaixa {
 
@@ -72,7 +73,7 @@ public class UICaixa {
 	 */
 	public UICaixa() throws Exception {
 		initialize();
-		loadTable();
+		loadTable(Contexto.getVendas());
 		loadForm();
 	}
 		
@@ -101,7 +102,53 @@ public class UICaixa {
 		}
 	}
 	
-	private void loadTable() {
+	private ArrayList<Venda> Filtrar() {
+		ArrayList<Venda> lst = new ArrayList<Venda>();
+		
+		Integer cdCliente = 0;
+		Integer cdCarro = 0;
+		
+		try {
+			cdCarro = GetSelectedId(cbCarro);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			if(cdCarro == null) cdCarro = 0;
+		}
+		
+		try {
+			cdCliente = GetSelectedId(cbCliente);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			if(cdCliente == null) cdCliente = 0;
+		}
+		
+		for (Venda item : Contexto.getVendas()) {
+			
+			if(cdCliente > 0)
+				if(item.getCliente().getId() != cdCliente)
+					continue;
+			
+			if(cdCarro > 0) {
+				Boolean temCarro = false;
+				for (Carro carro : item.getCarros()) {
+					if(carro.getId() == cdCarro)
+						temCarro = true;
+				} 
+					
+				if(!temCarro) continue;
+			}
+					
+			lst.add(item);
+		} 
+		
+		return lst;
+	}
+	
+	private void loadTable(ArrayList<Venda> dataSource) {
 		ClearTable(tbVendas);
 		
 		DefaultTableModel model = (DefaultTableModel)tbVendas.getModel();
@@ -111,7 +158,7 @@ public class UICaixa {
 		model.addColumn("Itens");
 		model.addColumn("Total");
 		
-		for (Venda venda : Contexto.getVendas()) {
+		for (Venda venda : dataSource) {
 			model.addRow(new Object[] { 
 				venda.getId(), 
 				venda.getCliente().getNome(), 
@@ -169,7 +216,7 @@ public class UICaixa {
 					}
 
 					public void windowLostFocus(WindowEvent arg0) {
-						loadTable();
+						loadTable(Contexto.getVendas());
 					}
 				});
 			}
@@ -226,6 +273,12 @@ public class UICaixa {
 		});
 		
 		JButton btnPesquisar = new JButton("Pesquisar");
+		btnPesquisar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				loadTable(Filtrar());
+			}
+		});
 		btnPesquisar.setBounds(278, 34, 92, 26);
 		
 		JScrollPane scrollPane = new JScrollPane();

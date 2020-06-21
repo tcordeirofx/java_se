@@ -28,7 +28,7 @@ public class Inicio {
 	private static void CarregaContexto() {		
 		//Inicializa Contexto de Dados
 		Contexto.Carregar();
-		Seed();
+		//Seed();
 	}
 	
 	@SuppressWarnings("unused")
